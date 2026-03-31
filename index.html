@@ -66,10 +66,19 @@
         .play-button i[data-lucide] { color: white; width: 24px; height: 24px; margin-left: 4px; }
         .duration-badge { position: absolute; bottom: 16px; right: 16px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; z-index: 2; display: flex; align-items: center; gap: 6px; }
         
-        /* IMAGE CAROUSEL (NEW) */
-        .image-carousel { display: flex; overflow-x: auto; width: 100%; height: 100%; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 16px; padding: 0 24px; align-items: center; background: transparent; }
+        /* IMAGE CAROUSEL & LIGHTBOX */
+        .visual-anchor.is-carousel { height: 500px; padding: 24px 0; background: #0F172A; }
+        .image-carousel { display: flex; overflow-x: auto; width: 100%; height: 100%; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; gap: 24px; padding: 0 64px; align-items: center; background: transparent; }
         .image-carousel::-webkit-scrollbar { display: none; }
-        .carousel-img { flex: 0 0 auto; width: auto; max-width: 90%; height: 85%; border-radius: 8px; object-fit: contain; scroll-snap-align: center; box-shadow: var(--shadow-md); border: 1px solid rgba(255,255,255,0.2); background: #222; }
+        .carousel-img { flex: 0 0 auto; width: auto; max-width: 90%; height: 100%; border-radius: 8px; object-fit: contain; scroll-snap-align: center; box-shadow: var(--shadow-md); border: 1px solid rgba(255,255,255,0.2); background: #222; cursor: zoom-in; transition: transform 0.2s; }
+        .carousel-img:hover { transform: scale(1.02); border-color: var(--secondary); }
+        .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); z-index: 10; transition: all 0.2s; }
+        .carousel-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-50%) scale(1.1); }
+        .carousel-btn.left { left: 16px; }
+        .carousel-btn.right { right: 16px; }
+        .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; cursor: zoom-out; }
+        .lightbox img { max-width: 95%; max-height: 95%; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); object-fit: contain; }
+        .lightbox.active { display: flex; }
 
         /* FULL CONTENT SECTION */
         .detailed-content { margin-bottom: 40px; color: var(--text-dark); line-height: 1.7; font-size: 15px; }
@@ -103,6 +112,11 @@
     </style>
 </head>
 <body>
+    
+    <!-- LIGHTBOX OVERLAY -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Fullscreen Image">
+    </div>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -376,16 +390,27 @@
             const visualContainer = document.getElementById('visual-container');
             if (data.images && data.images.length > 0) {
                 // Carousel View
-                let imagesHtml = '<div class="image-carousel">';
+                visualContainer.classList.add('is-carousel');
+                let imagesHtml = `
+                    <div class="carousel-btn left" onclick="scrollCarousel(-1)">
+                        <i data-lucide="chevron-left" width="24" height="24"></i>
+                    </div>
+                    <div class="carousel-btn right" onclick="scrollCarousel(1)">
+                        <i data-lucide="chevron-right" width="24" height="24"></i>
+                    </div>
+                    <div class="image-carousel" id="carousel-track">
+                `;
                 data.images.forEach(img => {
-                    imagesHtml += `<img src="${img}" class="carousel-img" alt="Step Screenshot">`;
+                    imagesHtml += `<img src="${img}" class="carousel-img" alt="Step Screenshot" onclick="openLightbox('${img}')">`;
                 });
-                imagesHtml += '</div><div style="position: absolute; bottom: 8px; right: 16px; color: rgba(255,255,255,0.8); font-size: 11px; z-index: 5; text-shadow: 0px 1px 4px rgba(0,0,0,0.8);">→ Scroll horizontally to see all steps </div>';
+                imagesHtml += '</div><div style="position: absolute; bottom: 8px; left: 16px; color: rgba(255,255,255,0.8); font-size: 12px; z-index: 5; text-shadow: 0px 1px 4px rgba(0,0,0,0.8);">💡 Click any image to enlarge</div>';
                 
                 visualContainer.innerHTML = imagesHtml;
                 visualContainer.onclick = null; // Remove the alert click
                 visualContainer.style.cursor = 'default';
             } else {
+                // Video Mockup View
+                visualContainer.classList.remove('is-carousel');
                 // Video Mockup View
                 visualContainer.innerHTML = `
                     <div class="visual-overlay"></div>
@@ -466,6 +491,32 @@
             document.getElementById('progress-percentage').innerText = percentage + "%";
             document.getElementById('progress-bar').style.width = percentage + "%";
         }
+
+        // --- NEW FEATURES ---
+        function scrollCarousel(direction) {
+            const track = document.getElementById('carousel-track');
+            if (track) {
+                const scrollAmount = track.clientWidth * 0.7; // Scroll 70% of the visible container
+                track.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+            }
+        }
+
+        function openLightbox(imgSrc) {
+            const lb = document.getElementById('lightbox');
+            const lbImg = document.getElementById('lightbox-img');
+            lbImg.src = imgSrc;
+            lb.classList.add('active');
+        }
+
+        function closeLightbox() {
+            const lb = document.getElementById('lightbox');
+            lb.classList.remove('active');
+        }
+        
+        // Escape key closes lightbox
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") closeLightbox();
+        });
 
         initCourse();
     </script>
