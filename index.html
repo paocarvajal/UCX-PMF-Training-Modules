@@ -1,25 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UCX PMF Training Module</title>
-    <!-- Mantenemos la tipografía corporativa exigida en MASTER_PMO_RULES.md -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         /* =========================================================================
            LOOK & FEEL CONFIGURATION
-           =========================================================================
-           Brand: Corporate Premium (Pepsico / Enterprise Agnostic)
-           Primary HEX: #0A369D (Deep Trust Blue)
-           Secondary HEX: #0078D4 (Action Blue)
-           Accent HEX: #10B981 (Success Green)
-           Background: #F8FAFC (Slate Light)
-           Typography: Inter / Segoe UI (Clean, scalable)
-           "The Anti-Crayon Rule" Applied natively.
-        ========================================================================= */
-
+           ========================================================================= */
         :root {
             --primary: #0A369D;
             --secondary: #0078D4;
@@ -33,356 +23,76 @@
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-dark); display: flex; height: 100vh; overflow: hidden; }
 
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-dark);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
+        /* SIDEBAR */
+        .sidebar { width: 320px; background-color: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; }
+        .sidebar-header { padding: 24px; border-bottom: 1px solid var(--border); }
+        .course-title { font-size: 14px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .module-title { font-size: 20px; font-weight: 700; color: var(--primary); }
+        .progress-container { margin-top: 16px; }
+        .progress-text { display: flex; justify-content: space-between; font-size: 12px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; }
+        .progress-bar-bg { height: 6px; background-color: var(--border); border-radius: 4px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; width: 0%; background-color: var(--success); border-radius: 4px; transition: width 0.5s ease-in-out; }
+        .nav-list { flex: 1; overflow-y: auto; padding: 16px 0; }
+        .nav-item { display: flex; align-items: flex-start; padding: 16px 24px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; gap: 16px; }
+        .nav-item:hover { background-color: #F1F5F9; }
+        .nav-item.active { background-color: #EFF6FF; border-left-color: var(--secondary); }
+        .nav-icon { margin-top: 2px; color: var(--text-muted); }
+        .nav-item.completed .nav-icon { color: var(--success); }
+        .nav-item.active .nav-icon { color: var(--secondary); }
+        .nav-content-stacked h4 { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+        .nav-content-stacked p { font-size: 12px; color: var(--text-muted); }
 
-        /* SIDEBAR NAVIGATION */
-        .sidebar {
-            width: 320px;
-            background-color: var(--bg-card);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
-        }
+        /* MAIN CONTENT */
+        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; scroll-behavior: smooth; }
+        .content-header { padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 5; }
+        .breadcrumb { font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+        .breadcrumb span { font-weight: 500; }
+        .content-wrapper { max-width: 900px; margin: 0 auto; padding: 48px; width: 100%; }
 
-        .sidebar-header {
-            padding: 24px;
-            border-bottom: 1px solid var(--border);
-        }
+        /* HEADER */
+        .lesson-header { margin-bottom: 32px; border-bottom: 1px solid var(--border); padding-bottom: 24px;}
+        .lesson-title { font-size: 32px; font-weight: 700; color: var(--primary); line-height: 1.2; margin-bottom: 12px; }
+        .lesson-subtitle { font-size: 18px; color: var(--text-muted); font-weight: 400; }
 
-        .course-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 8px;
-        }
+        /* VISUAL ANCHOR */
+        .visual-anchor { width: 100%; height: 280px; background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); border-radius: 12px; box-shadow: var(--shadow-lg); margin-bottom: 40px; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .visual-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at top right, rgba(0, 120, 212, 0.2), transparent); }
+        .play-button { width: 64px; height: 64px; background-color: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; z-index: 2; border: 1px solid rgba(255,255,255,0.2); }
+        .play-button:hover { transform: scale(1.1); background-color: rgba(255, 255, 255, 0.2); }
+        .play-button i[data-lucide] { color: white; width: 24px; height: 24px; margin-left: 4px; }
+        .duration-badge { position: absolute; bottom: 16px; right: 16px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; z-index: 2; display: flex; align-items: center; gap: 6px; }
 
-        .module-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary);
-        }
+        /* FULL CONTENT SECTION */
+        .detailed-content { margin-bottom: 40px; color: var(--text-dark); line-height: 1.7; font-size: 15px; }
+        .detailed-content h3 { font-size: 20px; font-weight: 600; color: var(--primary); margin-top: 32px; margin-bottom: 16px; }
+        .detailed-content h4 { font-size: 16px; font-weight: 600; color: var(--text-dark); margin-top: 24px; margin-bottom: 12px; }
+        .detailed-content p { margin-bottom: 16px; }
+        .detailed-content ul, .detailed-content ol { margin-bottom: 16px; padding-left: 24px; }
+        .detailed-content li { margin-bottom: 8px; }
+        .detailed-content strong { font-weight: 600; color: #000; }
+        .info-box { background-color: #EFF6FF; border-left: 4px solid var(--secondary); padding: 16px; border-radius: 0 8px 8px 0; margin: 24px 0; }
+        .info-box p { margin: 0; font-size: 14px; }
 
-        .progress-container {
-            margin-top: 16px;
-        }
+        /* MECE BULLET POINTS */
+        .mece-section { background-color: var(--bg-card); padding: 32px; border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
+        .mece-title { font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 24px; }
+        .mece-list { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+        .mece-item { display: flex; gap: 16px; align-items: flex-start; }
+        .bullet-icon { background-color: #EFF6FF; color: var(--secondary); padding: 8px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .mece-content h5 { font-size: 16px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+        .mece-content p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
 
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        .progress-bar-bg {
-            height: 6px;
-            background-color: var(--border);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background-color: var(--success);
-            border-radius: 4px;
-            transition: width 0.5s ease-in-out;
-        }
-
-        .nav-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px 0;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: flex-start;
-            padding: 16px 24px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border-left: 3px solid transparent;
-            gap: 16px;
-        }
-
-        .nav-item:hover {
-            background-color: #F1F5F9;
-        }
-
-        .nav-item.active {
-            background-color: #EFF6FF;
-            border-left-color: var(--secondary);
-        }
-
-        .nav-icon {
-            margin-top: 2px;
-            color: var(--text-muted);
-        }
-
-        .nav-item.completed .nav-icon {
-            color: var(--success);
-        }
-
-        .nav-item.active .nav-icon {
-            color: var(--secondary);
-        }
-
-        .nav-content-stacked h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 4px;
-        }
-
-        .nav-content-stacked p {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        /* MAIN CONTENT AREA */
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            scroll-behavior: smooth;
-        }
-
-        .content-header {
-            padding: 32px 48px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 5;
-        }
-
-        .breadcrumb {
-            font-size: 13px;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .breadcrumb span {
-            font-weight: 500;
-        }
-
-        .content-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 48px;
-            width: 100%;
-        }
-
-        /* 1 INSIGHTFUL TITLE (Anti-Crayon Rule) */
-        .lesson-header {
-            margin-bottom: 32px;
-        }
-
-        .lesson-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--primary);
-            line-height: 1.2;
-            margin-bottom: 12px;
-        }
-
-        .lesson-subtitle {
-            font-size: 18px;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        /* 1 VISUAL ANCHOR */
-        .visual-anchor {
-            width: 100%;
-            height: 480px;
-            background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-            margin-bottom: 40px;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .visual-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: radial-gradient(circle at top right, rgba(0, 120, 212, 0.2), transparent);
-        }
-
-        .play-button {
-            width: 80px;
-            height: 80px;
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 2;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .play-button:hover {
-            transform: scale(1.1);
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .play-button i[data-lucide] {
-            color: white;
-            width: 32px;
-            height: 32px;
-            margin-left: 4px;
-        }
-
-        .duration-badge {
-            position: absolute;
-            bottom: 24px;
-            right: 24px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* 3-5 MECE BULLET POINTS */
-        .mece-section {
-            background-color: var(--bg-card);
-            padding: 32px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
-        }
-
-        .mece-title {
-            font-size: 16px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin-bottom: 24px;
-        }
-
-        .mece-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .mece-item {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-        }
-
-        .bullet-icon {
-            background-color: #EFF6FF;
-            color: var(--secondary);
-            padding: 8px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .mece-content h5 {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 4px;
-        }
-
-        .mece-content p {
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        /* ACTION FOOTER */
-        .lesson-footer {
-            margin-top: 48px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 32px;
-            border-top: 1px solid var(--border);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-dark);
-        }
-
-        .btn-outline:hover {
-            background-color: var(--bg-body);
-        }
-
-        .btn-primary {
-            background-color: var(--secondary);
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 120, 212, 0.2);
-        }
-
-        .btn-primary:hover {
-            background-color: #0066B4;
-            transform: translateY(-1px);
-        }
-
-        .btn-success {
-            background-color: var(--success);
-            color: white;
-        }
+        /* FOOTER */
+        .lesson-footer { margin-top: 48px; display: flex; justify-content: space-between; align-items: center; padding-top: 32px; border-top: 1px solid var(--border); padding-bottom: 48px; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
+        .btn-outline { background-color: transparent; border: 1px solid var(--border); color: var(--text-dark); }
+        .btn-outline:hover { background-color: var(--bg-body); }
+        .btn-primary { background-color: var(--secondary); color: white; box-shadow: 0 4px 12px rgba(0, 120, 212, 0.2); }
+        .btn-primary:hover { background-color: #0066B4; transform: translateY(-1px); }
+        .btn-success { background-color: var(--success); color: white; }
 
     </style>
 </head>
@@ -391,12 +101,12 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <div class="course-title" id="course-name">Cargando...</div>
-            <h2 class="module-title" id="course-topic">Cargando...</h2>
+            <div class="course-title" id="course-name">Loading...</div>
+            <h2 class="module-title" id="course-topic">Loading...</h2>
             
             <div class="progress-container">
                 <div class="progress-text">
-                    <span>Progreso del Curso</span>
+                    <span>Course Progress</span>
                     <span id="progress-percentage">0%</span>
                 </div>
                 <div class="progress-bar-bg">
@@ -404,10 +114,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="nav-list" id="nav-list-container">
-            <!-- Cargado por JS -->
-        </div>
+        <div class="nav-list" id="nav-list-container"></div>
     </aside>
 
     <!-- MAIN CONTENT -->
@@ -416,105 +123,166 @@
             <div class="breadcrumb">
                 <span id="header-topic">Dashboard</span>
                 <i data-lucide="chevron-right" width="14" height="14"></i>
-                <span style="color: var(--secondary);" id="header-module-name">Cargando...</span>
+                <span style="color: var(--secondary);" id="header-module-name">Loading...</span>
             </div>
         </header>
 
         <div class="content-wrapper">
             <!-- 1 INSIGHTFUL TITLE -->
             <div class="lesson-header">
-                <h1 class="lesson-title" id="content-title">Cargando...</h1>
-                <p class="lesson-subtitle" id="content-subtitle">Por favor espera.</p>
+                <h1 class="lesson-title" id="content-title">Loading...</h1>
+                <p class="lesson-subtitle" id="content-subtitle">Please wait.</p>
             </div>
 
-            <!-- 1 VISUAL ANCHOR -->
-            <div class="visual-anchor">
+            <!-- VISUAL ANCHOR -->
+            <div class="visual-anchor" onclick="playVideoSimulation()">
                 <div class="visual-overlay"></div>
-                <div class="play-button" onclick="playVideoSimulation()">
+                <div class="play-button">
                     <i data-lucide="play"></i>
                 </div>
                 <div class="duration-badge">
                     <i data-lucide="clock" width="14" height="14"></i> <span id="visual-timer">15:00</span>
                 </div>
+                <div style="position: absolute; bottom: 16px; left: 24px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500;">
+                    Video Placeholder (Mockup)
+                </div>
+            </div>
+
+            <!-- DYNAMIC FULL TEXT CONTENT -->
+            <div class="detailed-content" id="full-html-content">
+                <!-- Content injected via JS -->
             </div>
 
             <!-- 3-5 MECE BULLET POINTS -->
             <div class="mece-section">
-                <h3 class="mece-title">Key Takeaways (Mandatorios)</h3>
+                <h3 class="mece-title">Executive Takeaways (Mandatory)</h3>
                 <ul class="mece-list" id="bullet-points-container">
-                    <!-- Cargado por JS -->
+                    <!-- Injected via JS -->
                 </ul>
             </div>
 
             <!-- ACTION FOOTER -->
             <div class="lesson-footer">
                 <button class="btn btn-outline" id="prev-btn" onclick="prevModule()">
-                    <i data-lucide="arrow-left" width="18" height="18"></i> Lección Anterior
+                    <i data-lucide="arrow-left" width="18" height="18"></i> Previous Lesson
                 </button>
                 <button class="btn btn-primary" id="complete-btn" onclick="completeModule()">
-                    Marcar como Completado <i data-lucide="check" width="18" height="18"></i>
+                    Mark as Completed <i data-lucide="check" width="18" height="18"></i>
                 </button>
             </div>
         </div>
     </main>
 
     <script>
-        /* =========================================================================================
-           MANUAL TO POWER: EDITA TU INFORMACIÓN AQUÍ (Data Layer)
-           Instrucciones: Simplemente copia el texto de Confluence y pégalo entre las comillas. 
-           No necesitas tocar el HTML de arriba. Solo cambia este bloque "COURSE_DATA".
-           ========================================================================================= */
-
         const COURSE_DATA = {
             courseName: "Mi Negocio+ Registration",
             courseTopic: "UCX PMF Training Module",
             modules: [
                 {
                     id: 1,
-                    sidebarName: "1. Triage y Validación",
+                    sidebarName: "1. Triage & Validation",
                     time: "10 min",
-                    title: "Validación de Elegibilidad",
-                    subtitle: "Comprobaciones obligatorias antes de iniciar el registro en la app.",
+                    title: "Eligibility Validation",
+                    subtitle: "Mandatory pre-checks before assisting the customer with the app registration.",
+                    contentHtml: `
+                        <h3>Pre-Registration Step-by-Step</h3>
+                        <p>Before proceeding with the app installation or guided flow, the agent must perform critical validations in the system to confirm the customer's eligibility and status.</p>
+                        
+                        <h4>1. Check Eligibility Database</h4>
+                        <p>Agent searches the eligibility database provided by Mi Negocio to confirm the customer is theoretically eligible for the program.</p>
+
+                        <h4>2. Check CEP (Mandatory)</h4>
+                        <p>Agent searches CEP to validate the customer's account status. This step is <strong>mandatory for all processes</strong>.</p>
+                        <ul>
+                            <li><strong>In Database AND CEP:</strong> Proceed normally.</li>
+                            <li><strong>In CEP only:</strong> Proceed (Customer is still eligible).</li>
+                            <li><strong>In Database only:</strong> Proceed (Customer likely has not started registration).</li>
+                            <li><strong>Not in either:</strong> Customer is <strong>not eligible</strong>. Provide the non-eligibility script and STOP.</li>
+                        </ul>
+
+                        <h4>3. Handling Existing Registrations</h4>
+                        <p>The agent must verify whether the customer already has a previous registration in CEP:</p>
+                        <ul>
+                            <li>If <strong>already registered</strong>: Do NOT create a new registration. Redirect to the <em>"I forgot my password"</em> process.</li>
+                            <li>If registered with an <strong>inaccessible email</strong>: Create a <strong>Service Request</strong> to request a user update (assigned to Luis Máximo).</li>
+                            <li>If CEP shows data of <strong>another person</strong>: Create a <strong>Service Request</strong> for data correction.</li>
+                        </ul>
+                    `,
                     bullets: [
-                        { title: "Check Eligibility DB", desc: "Verificar en la base de datos si el cliente califica para la aplicación." },
-                        { title: "Verificación CEP (Mandatorio)", desc: "Si ya existe en CEP, redirigir a recuperación de contraseña. No crear registro nuevo." },
-                        { title: "Correo Inaccesible", desc: "Si el cliente perdió acceso a su correo registrado, generar un Service Request asignado a Luis Máximo." }
+                        { title: "Check Eligibility DB & CEP", desc: "Always cross-reference the customer against CEP to ensure valid status." },
+                        { title: "No Duplicate Registrations", desc: "If the customer is already in CEP, immediately pivot to Password Recovery." },
+                        { title: "Inaccessible Email Protocol", desc: "Do not attempt workarounds. Generate a Service Request assigned to Luis Máximo." }
                     ]
                 },
                 {
                     id: 2,
-                    sidebarName: "2. Flujo de Registro",
+                    sidebarName: "2. Customer Registration Flow",
                     time: "15 min",
-                    title: "El Paso a Paso del Cliente",
-                    subtitle: "Guía dentro de Mi Negocio+ (App MX).",
+                    title: "The Customer Journey",
+                    subtitle: "Step-by-step guidance within the Mi Negocio+ (MX) application.",
+                    contentHtml: `
+                        <h3>Guided Registration Process</h3>
+                        <p>Follow these steps exactly as they appear on the customer's screen during a live call.</p>
+                        
+                        <ol>
+                            <li><strong>Verify App Installation:</strong> Confirm the customer has downloaded "Mi Negocio+ MX".</li>
+                            <li><strong>Select Registration Method:</strong> Customer chooses Phone, Email, or Google. <em>(Note: Recommend Phone. Gmail has known backend issues limiting password recovery)</em>.</li>
+                            <li><strong>Input Client Data:</strong> Customer enters Phone/Email and their <strong>Client ID</strong>.</li>
+                        </ol>
+
+                        <div class="info-box">
+                            <p><strong><i data-lucide="alert-triangle" style="width:14px; margin-bottom:-2px;"></i> Universal OTP Code Fallback:</strong> If the SMS or email verification code fails to arrive, the system uses a backup. The agent must provide the <strong>Generic Universal OTP Code</strong>. This code works for registration, password reset, and phone number changes.</p>
+                        </div>
+
+                        <h4>Finalizing the Profile</h4>
+                        <ul>
+                            <li><strong>Verify Store Address:</strong> The system automatically displays the store info based on Client ID. <strong>This address cannot be changed in the app.</strong></li>
+                            <li><strong>Password Creation Rules:</strong> 
+                                The password must be strictly: Minimum 8 characters, 1 Uppercase letter, 1 Lowercase letter, 1 Number, and 1 Symbol. Customer must type it twice.
+                            </li>
+                            <li><strong>First Login:</strong> Registration is finished only when the customer returns to the login screen and successfully accesses their dashboard.</li>
+                        </ul>
+                    `,
                     bullets: [
-                        { title: "Método de Registro", desc: "Se recomienda Teléfono. ⚠️ Cuidado con Gmail: Causa problemas futuros al resetear contraseña." },
-                        { title: "Código OTP (Fallback)", desc: "Si el cliente no recibe el SMS, el agente debe proveer el 'Código Genérico Universal' como contingencia." },
-                        { title: "Creación de Password", desc: "Mínimo 8 caracteres: 1 Mayúscula, 1 minúscula, 1 número y 1 símbolo." }
+                        { title: "Registration Method", desc: "Phone is highly recommended. Flag Gmail as a known risk for future recovery issues." },
+                        { title: "Universal OTP (Fallback)", desc: "If the customer is stuck waiting for a code, deploy the universal contingency code immediately." },
+                        { title: "Password Rule Enforcement", desc: "Ensure strict adherence: 8 Chars, Upper, Lower, Numbers, and Symbols." }
                     ]
                 },
                 {
                     id: 3,
-                    sidebarName: "3. Troubleshooting (Errores)",
+                    sidebarName: "3. Troubleshooting (Escalations)",
                     time: "12 min",
-                    title: "Resolución de Bloqueos",
-                    subtitle: "Escalación y manejo de contingencias tecnológicas.",
+                    title: "Handling Errors & Blocks",
+                    subtitle: "Standard Operational Procedures for technological contingencies.",
+                    contentHtml: `
+                        <h3>Post-Registration Troubleshooting Matrix</h3>
+                        <p>If the customer completes registration but cannot log in, structural blocks may be in place. Follow the strict resolution paths below based on the symptom.</p>
+                        
+                        <h4>Account Level Blocks</h4>
+                        <ul>
+                            <li><strong>Account is Blocked in CEP:</strong> If Okta status explicitly shows "blocked", the agent has direct authorization to <strong>Unblock</strong> the account via CEP. No escalation required.</li>
+                            <li><strong>Account is Inactive or Suspended:</strong> Agent cannot fix this directly. Generate a <strong>Service Request</strong>.</li>
+                        </ul>
+
+                        <h4>Technical Errors</h4>
+                        <p>System failures must be tracked using the official IT Service Management tool:</p>
+                        <ul>
+                            <li><strong>"User Not Recognized" Error:</strong> If the account is NOT blocked but this error appears, create an <strong>Incident</strong> in Service Now (assigned to Gerardo).</li>
+                            <li><strong>App Crashes/Freezes:</strong> If the application explicitly crashes during the flow or throws unhandled server errors, generate an <strong>Incident</strong> in Service Now (assigned to Gerardo).</li>
+                        </ul>
+                    `,
                     bullets: [
-                        { title: "Cuenta Bloqueada (Okta)", desc: "Si el status dice 'Blocked' en CEP, el agente debe desbloquearla directamente." },
-                        { title: "Cuenta Inactiva/Suspendida", desc: "Levantar un Service Request inmediato." },
-                        { title: "App Crash / Error de Sistema", desc: "Para errores técnicos de la aplicación o códigos no reconocidos, crear Incident en Service Now (asignar a Gerardo)." }
+                        { title: "Direct Unblocking", desc: "Okta 'blocked' statuses can be unblocked directly by the agent in CEP." },
+                        { title: "Service Requests", desc: "Use SRs exclusively for Inactive/Suspended states or Email/Data updates." },
+                        { title: "Service Now Incidents", desc: "Route actual App Crashes and 'User Not Recognized' bugs to Gerardo." }
                     ]
                 }
             ]
         };
 
-        /* =========================================================================================
-           MOTOR LÓGICO (NO TOCAR SI NO ERES DEVELOPER)
-           ========================================================================================= */
-        
         // Initialize Icons
         lucide.createIcons();
-
         let currentModuleIndex = 0;
         let completedModules = Array(COURSE_DATA.modules.length).fill(false);
 
@@ -533,26 +301,26 @@
             COURSE_DATA.modules.forEach((mod, index) => {
                 let statusClass = "locked";
                 let icon = "lock";
-                let statusText = "Bloqueado";
+                let statusText = "Locked";
 
                 if (completedModules[index]) {
                     statusClass = "completed";
                     icon = "check-circle";
-                    statusText = "Completado";
+                    statusText = "Completed";
                 } else if (index === currentModuleIndex) {
                     statusClass = "active";
                     icon = "play-circle";
-                    statusText = "En Progreso";
+                    statusText = "In Progress";
                 } else if (index > 0 && completedModules[index - 1]) {
                     statusClass = "";
                     icon = "play";
-                    statusText = "Disponible";
+                    statusText = "Available";
                 }
 
                 if (index === 0 && !completedModules[0] && currentModuleIndex !== 0) {
                      statusClass = "";
                      icon = "play";
-                     statusText = "Disponible";
+                     statusText = "Available";
                 }
 
                 const item = document.createElement('div');
@@ -588,7 +356,11 @@
             document.getElementById('content-title').innerText = data.title;
             document.getElementById('content-subtitle').innerText = data.subtitle;
             document.getElementById('visual-timer').innerText = data.time;
+            
+            // Render Full Text Content
+            document.getElementById('full-html-content').innerHTML = data.contentHtml;
 
+            // Render Bullets
             const bulletContainer = document.getElementById('bullet-points-container');
             bulletContainer.innerHTML = '';
             data.bullets.forEach(b => {
@@ -609,20 +381,20 @@
                 completeBtn.classList.remove('btn-primary');
                 completeBtn.style.backgroundColor = 'var(--success)';
                 completeBtn.style.color = 'white';
-                completeBtn.innerHTML = '¡Módulo Completado! <i data-lucide="check-circle" width="18" height="18"></i>';
+                completeBtn.innerHTML = 'Module Completed! <i data-lucide="check-circle" width="18" height="18"></i>';
             } else {
                 completeBtn.removeAttribute("style");
                 completeBtn.className = 'btn btn-primary';
                 completeBtn.style.backgroundColor = 'var(--secondary)';
                 completeBtn.style.color = 'white';
-                completeBtn.innerHTML = 'Marcar como Completado <i data-lucide="check" width="18" height="18"></i>';
+                completeBtn.innerHTML = 'Mark as Completed <i data-lucide="check" width="18" height="18"></i>';
             }
 
             document.getElementById('prev-btn').style.opacity = index === 0 ? "0" : "1";
             
             renderSidebar();
             
-            // Auto scroll to top on module load so user notices the page changed
+            // Auto scroll to top
             document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -648,7 +420,7 @@
         }
         
         function playVideoSimulation() {
-            alert("PMO Action: El contenido multimedia interactivo se vinculará en producción una vez completado el guion gráfico. \n\nPor ahora, lee los 'Key Takeaways' debajo y haz clic en 'Marcar como Completado' para avanzar el progreso.");
+            alert("PMO Notice: The interactive video content will be embedded here in production. For now, please review the text blocks below and click 'Mark as Completed' to advance.");
         }
 
         initCourse();
