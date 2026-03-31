@@ -430,7 +430,7 @@
             <!-- 1 VISUAL ANCHOR -->
             <div class="visual-anchor">
                 <div class="visual-overlay"></div>
-                <div class="play-button">
+                <div class="play-button" onclick="playVideoSimulation()">
                     <i data-lucide="play"></i>
                 </div>
                 <div class="duration-badge">
@@ -621,6 +621,9 @@
             document.getElementById('prev-btn').style.opacity = index === 0 ? "0" : "1";
             
             renderSidebar();
+            
+            // Auto scroll to top on module load so user notices the page changed
+            document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function completeModule() {
@@ -642,6 +645,10 @@
             
             document.getElementById('progress-percentage').innerText = percentage + "%";
             document.getElementById('progress-bar').style.width = percentage + "%";
+        }
+        
+        function playVideoSimulation() {
+            alert("PMO Action: El contenido multimedia interactivo se vinculará en producción una vez completado el guion gráfico. \n\nPor ahora, lee los 'Key Takeaways' debajo y haz clic en 'Marcar como Completado' para avanzar el progreso.");
         }
 
         initCourse();
