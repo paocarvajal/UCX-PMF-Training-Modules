@@ -466,29 +466,43 @@
            ========================================================================================= */
 
         const COURSE_DATA = {
-            courseName: "External Deployment Academy",
+            courseName: "Mi Negocio+ Registration",
             courseTopic: "UCX PMF Training Module",
             modules: [
                 {
                     id: 1,
-                    sidebarName: "1. Introducción al Core",
+                    sidebarName: "1. Triage y Validación",
                     time: "10 min",
-                    title: "Bienvenidos a UCX PMF",
-                    subtitle: "Entorno inicial y alineación de arquitecturas.",
+                    title: "Validación de Elegibilidad",
+                    subtitle: "Comprobaciones obligatorias antes de iniciar el registro en la app.",
                     bullets: [
-                        { title: "Manejo de Matrices", desc: "Cómo acceder al PMF Alignment para seguimiento de Stakeholders." },
-                        { title: "Ejecutivo vs Técnico", desc: "El flujo de cambio: Desde la aprobación del Director hasta el backlog técnico." }
+                        { title: "Check Eligibility DB", desc: "Verificar en la base de datos si el cliente califica para la aplicación." },
+                        { title: "Verificación CEP (Mandatorio)", desc: "Si ya existe en CEP, redirigir a recuperación de contraseña. No crear registro nuevo." },
+                        { title: "Correo Inaccesible", desc: "Si el cliente perdió acceso a su correo registrado, generar un Service Request asignado a Luis Máximo." }
                     ]
                 },
                 {
                     id: 2,
-                    sidebarName: "2. Gestión de Entregables (RAI)",
+                    sidebarName: "2. Flujo de Registro",
                     time: "15 min",
-                    title: "RAI Log",
-                    subtitle: "El estándar 'Responsible, Action, Item' implementado en PMF.",
+                    title: "El Paso a Paso del Cliente",
+                    subtitle: "Guía dentro de Mi Negocio+ (App MX).",
                     bullets: [
-                        { title: "Registro Único", desc: "Copiar todos los riesgos desde PENDING_LOG maestro. Nada en paralelo." },
-                        { title: "Asignación Estricta", desc: "El PM responsable debe asegurar que cada item tenga un Owner definido." }
+                        { title: "Método de Registro", desc: "Se recomienda Teléfono. ⚠️ Cuidado con Gmail: Causa problemas futuros al resetear contraseña." },
+                        { title: "Código OTP (Fallback)", desc: "Si el cliente no recibe el SMS, el agente debe proveer el 'Código Genérico Universal' como contingencia." },
+                        { title: "Creación de Password", desc: "Mínimo 8 caracteres: 1 Mayúscula, 1 minúscula, 1 número y 1 símbolo." }
+                    ]
+                },
+                {
+                    id: 3,
+                    sidebarName: "3. Troubleshooting (Errores)",
+                    time: "12 min",
+                    title: "Resolución de Bloqueos",
+                    subtitle: "Escalación y manejo de contingencias tecnológicas.",
+                    bullets: [
+                        { title: "Cuenta Bloqueada (Okta)", desc: "Si el status dice 'Blocked' en CEP, el agente debe desbloquearla directamente." },
+                        { title: "Cuenta Inactiva/Suspendida", desc: "Levantar un Service Request inmediato." },
+                        { title: "App Crash / Error de Sistema", desc: "Para errores técnicos de la aplicación o códigos no reconocidos, crear Incident en Service Now (asignar a Gerardo)." }
                     ]
                 }
             ]
