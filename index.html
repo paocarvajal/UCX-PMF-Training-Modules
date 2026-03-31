@@ -27,6 +27,11 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
         body { background-color: var(--bg-body); color: var(--text-dark); display: flex; height: 100vh; overflow: hidden; }
 
+        /* LIGHTBOX OVERLAY */
+        .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; cursor: zoom-out; }
+        .lightbox img { max-width: 95%; max-height: 95%; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); object-fit: contain; }
+        .lightbox.active { display: flex; }
+
         /* SIDEBAR */
         .sidebar { width: 320px; background-color: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; }
         .sidebar-header { padding: 24px; border-bottom: 1px solid var(--border); }
@@ -58,38 +63,29 @@
         .lesson-title { font-size: 32px; font-weight: 700; color: var(--primary); line-height: 1.2; margin-bottom: 12px; }
         .lesson-subtitle { font-size: 18px; color: var(--text-muted); font-weight: 400; }
 
-        /* VISUAL ANCHOR (DYNAMIC) */
-        .visual-anchor { width: 100%; height: 280px; background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); border-radius: 12px; box-shadow: var(--shadow-lg); margin-bottom: 40px; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s }
-        .visual-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at top right, rgba(0, 120, 212, 0.2), transparent); }
+        /* VISUAL ANCHOR (DYNAMIC VIDEO) */
+        .visual-anchor { width: 100%; height: 350px; background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); border-radius: 12px; box-shadow: var(--shadow-lg); margin-bottom: 40px; position: relative; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s }
+        .visual-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at top right, rgba(0, 120, 212, 0.2), transparent); pointer-events: none;}
         .play-button { width: 64px; height: 64px; background-color: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; z-index: 2; border: 1px solid rgba(255,255,255,0.2); }
         .play-button:hover { transform: scale(1.1); background-color: rgba(255, 255, 255, 0.2); }
         .play-button i[data-lucide] { color: white; width: 24px; height: 24px; margin-left: 4px; }
         .duration-badge { position: absolute; bottom: 16px; right: 16px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; z-index: 2; display: flex; align-items: center; gap: 6px; }
-        
-        /* IMAGE CAROUSEL & LIGHTBOX */
-        .visual-anchor.is-carousel { height: 500px; padding: 24px 0; background: #0F172A; }
-        .image-carousel { display: flex; overflow-x: auto; width: 100%; height: 100%; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; gap: 24px; padding: 0 64px; align-items: center; background: transparent; }
-        .image-carousel::-webkit-scrollbar { display: none; }
-        .carousel-img { flex: 0 0 auto; width: auto; max-width: 90%; height: 100%; border-radius: 8px; object-fit: contain; scroll-snap-align: center; box-shadow: var(--shadow-md); border: 1px solid rgba(255,255,255,0.2); background: #222; cursor: zoom-in; transition: transform 0.2s; }
-        .carousel-img:hover { transform: scale(1.02); border-color: var(--secondary); }
-        .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); z-index: 10; transition: all 0.2s; }
-        .carousel-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-50%) scale(1.1); }
-        .carousel-btn.left { left: 16px; }
-        .carousel-btn.right { right: 16px; }
-        .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; cursor: zoom-out; }
-        .lightbox img { max-width: 95%; max-height: 95%; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); object-fit: contain; }
-        .lightbox.active { display: flex; }
 
-        /* FULL CONTENT SECTION */
+        /* FULL CONTENT & INLINE SCREENS */
         .detailed-content { margin-bottom: 40px; color: var(--text-dark); line-height: 1.7; font-size: 15px; }
         .detailed-content h3 { font-size: 20px; font-weight: 600; color: var(--primary); margin-top: 32px; margin-bottom: 16px; }
-        .detailed-content h4 { font-size: 16px; font-weight: 600; color: var(--text-dark); margin-top: 24px; margin-bottom: 12px; }
+        .detailed-content h4 { font-size: 16px; font-weight: 600; color: var(--text-dark); margin-top: 0; margin-bottom: 8px; }
         .detailed-content p { margin-bottom: 16px; }
         .detailed-content ul, .detailed-content ol { margin-bottom: 16px; padding-left: 24px; }
         .detailed-content li { margin-bottom: 8px; }
         .detailed-content strong { font-weight: 600; color: #000; }
         .info-box { background-color: #EFF6FF; border-left: 4px solid var(--secondary); padding: 16px; border-radius: 0 8px 8px 0; margin: 24px 0; }
         .info-box p { margin: 0; font-size: 14px; }
+
+        .step-container { display: flex; align-items: flex-start; gap: 32px; margin-top: 24px; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+        .step-text { flex: 1; }
+        .step-img { width: 140px; border-radius: 8px; box-shadow: var(--shadow-md); border: 1px solid var(--border); cursor: zoom-in; transition: transform 0.2s; }
+        .step-img:hover { transform: scale(1.03); border-color: var(--secondary); }
 
         /* MECE BULLET POINTS */
         .mece-section { background-color: var(--bg-card); padding: 32px; border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
@@ -112,7 +108,7 @@
     </style>
 </head>
 <body>
-    
+
     <!-- LIGHTBOX OVERLAY -->
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
         <img id="lightbox-img" src="" alt="Fullscreen Image">
@@ -154,9 +150,9 @@
                 <p class="lesson-subtitle" id="content-subtitle">Please wait.</p>
             </div>
 
-            <!-- VISUAL ANCHOR (DYNAMIC VIDEO OR CAROUSEL) -->
+            <!-- VISUAL ANCHOR (DYNAMIC VIDEO) -->
             <div class="visual-anchor" id="visual-container">
-                <!-- Javascript Injects Carousel or Video Placeholder here -->
+                <!-- Javascript Injects Video Player or Placeholder here -->
             </div>
 
             <!-- DYNAMIC FULL TEXT CONTENT -->
@@ -200,7 +196,6 @@
                     time: "10 min",
                     title: "Eligibility Validation",
                     subtitle: "Mandatory pre-checks before assisting the customer with the app registration.",
-                    images: [],
                     contentHtml: `
                         <h3>Pre-Registration Step-by-Step</h3>
                         <p>Before proceeding with the app installation or guided flow, the agent must perform critical validations in the system to confirm the customer's eligibility and status.</p>
@@ -237,36 +232,61 @@
                     time: "15 min",
                     title: "The Customer Journey",
                     subtitle: "Step-by-step guidance within the Mi Negocio+ (MX) application.",
-                    images: [
-                        "assets/1.jpeg",
-                        "assets/2.jpeg",
-                        "assets/3.jpeg",
-                        "assets/4.jpeg",
-                        "assets/5.jpeg",
-                        "assets/6.jpeg"
-                    ],
+                    videoUrl: "assets/Registration_Video.mp4",
                     contentHtml: `
                         <h3>Guided Registration Process</h3>
-                        <p>Follow these steps exactly as they appear on the customer's screen during a live call.</p>
+                        <p>Follow these screens exactly as they appear on the customer's device during a live call. (Play the central video above for the full end-to-end recorded flow).</p>
                         
-                        <ol>
-                            <li><strong>Verify App Installation:</strong> Confirm the customer has downloaded "Mi Negocio+ MX".</li>
-                            <li><strong>Select Registration Method:</strong> Customer chooses Phone, Email, or Google. <em>(Note: Recommend Phone. Gmail has known backend issues limiting password recovery)</em>.</li>
-                            <li><strong>Input Client Data:</strong> Customer enters Phone/Email and their <strong>Client ID</strong>.</li>
-                        </ol>
-
-                        <div class="info-box">
-                            <p><strong><i data-lucide="alert-triangle" style="width:14px; margin-bottom:-2px;"></i> Universal OTP Code Fallback:</strong> If the SMS or email verification code fails to arrive, the system uses a backup. The agent must provide the <strong>Generic Universal OTP Code</strong>. This code works for registration, password reset, and phone number changes.</p>
+                        <div class="step-container">
+                            <div class="step-text">
+                                <h4>1. Method Selection & Phone Input</h4>
+                                <p>Customer chooses Phone, Email, or Google. <em>(Note: Recommend Phone. Gmail has known backend issues limiting password recovery)</em>. They must enter their Phone number and <strong>Client ID</strong> precisely to bind local databases correctly.</p>
+                            </div>
+                            <img class="step-img" src="assets/1.jpeg" alt="Phone Input" onclick="openLightbox('assets/1.jpeg')">
                         </div>
 
-                        <h4>Finalizing the Profile</h4>
-                        <ul>
-                            <li><strong>Verify Store Address:</strong> The system automatically displays the store info based on Client ID. <strong>This address cannot be changed in the app.</strong></li>
-                            <li><strong>Password Creation Rules:</strong> 
-                                The password must be strictly: Minimum 8 characters, 1 Uppercase letter, 1 Lowercase letter, 1 Number, and 1 Symbol. Customer must type it twice.
-                            </li>
-                            <li><strong>First Login:</strong> Registration is finished only when the customer returns to the login screen and successfully accesses their dashboard.</li>
-                        </ul>
+                        <div class="step-container">
+                            <div class="step-text">
+                                <h4>2. OTP Verification</h4>
+                                <p>The system triggers a One-Time-Password sent via SMS to the device. The customer must insert the 6-digit code to verify their identity and device ownership.</p>
+                                <div class="info-box" style="margin-top: 16px;">
+                                    <p><strong><i data-lucide="alert-triangle" style="width:14px; margin-bottom:-2px;"></i> Universal OTP Code Fallback:</strong> If the SMS fails, deploy the Generic Universal Code immediately to unblock the client.</p>
+                                </div>
+                            </div>
+                            <img class="step-img" src="assets/2.jpeg" alt="OTP Input" onclick="openLightbox('assets/2.jpeg')">
+                        </div>
+
+                        <div class="step-container">
+                            <div class="step-text">
+                                <h4>3. Welcome / Success Status Screen</h4>
+                                <p>Upon successful verification of the OTP or password reset, the app confirms the update and prompts the user to log in formally using their freshly minted or rescued credentials.</p>
+                            </div>
+                            <img class="step-img" src="assets/3.jpeg" alt="Welcome Screen" onclick="openLightbox('assets/3.jpeg')">
+                        </div>
+
+                        <div class="step-container">
+                            <div class="step-text">
+                                <h4>4. First Login Architecture</h4>
+                                <p>The customer arrives at the standard native login screen. They must input the phone number established and the password. Ensure strict adherence on password rules: <strong>8 Chars minimum, Upper, Lower, Numbers, and Symbols.</strong></p>
+                            </div>
+                            <img class="step-img" src="assets/4.jpeg" alt="Login View" onclick="openLightbox('assets/4.jpeg')">
+                        </div>
+
+                        <div class="step-container">
+                            <div class="step-text">
+                                <h4>5. Terms & Conditions Compliance</h4>
+                                <p>Before passing into the active dashboard, the mandatory legal Terms & Conditions must be verified. Ensure the client actively checks the appropriate dialogue box before clicking "Aceptar".</p>
+                            </div>
+                            <img class="step-img" src="assets/5.jpeg" alt="Terms and Conditions" onclick="openLightbox('assets/5.jpeg')">
+                        </div>
+
+                        <div class="step-container" style="border-bottom:none;">
+                            <div class="step-text">
+                                <h4>6. Final Profile Aggregation</h4>
+                                <p>The system finishes mapping the Client ID against national data dictionaries and generates the default store profile, locking address information which natively becomes uneditable from the application layer.</p>
+                            </div>
+                            <img class="step-img" src="assets/6.jpeg" alt="Profile View" onclick="openLightbox('assets/6.jpeg')">
+                        </div>
                     `,
                     bullets: [
                         { title: "Registration Method", desc: "Phone is highly recommended. Flag Gmail as a known risk for future recovery issues." },
@@ -280,7 +300,6 @@
                     time: "12 min",
                     title: "Handling Errors & Blocks",
                     subtitle: "Standard Operational Procedures for technological contingencies.",
-                    images: [],
                     contentHtml: `
                         <h3>Post-Registration Troubleshooting Matrix</h3>
                         <p>If the customer completes registration but cannot log in, structural blocks may be in place. Follow the strict resolution paths below based on the symptom.</p>
@@ -337,21 +356,15 @@
                     statusClass = "active";
                     icon = "play-circle";
                     statusText = "In Progress";
-                } else if (index > 0 && completedModules[index - 1]) {
+                } else {
                     statusClass = "";
                     icon = "play";
                     statusText = "Available";
                 }
 
-                if (index === 0 && !completedModules[0] && currentModuleIndex !== 0) {
-                     statusClass = "";
-                     icon = "play";
-                     statusText = "Available";
-                }
-
                 const item = document.createElement('div');
                 item.className = `nav-item ${statusClass}`;
-                item.onclick = () => { if (index <= getHighestUnlocked()) loadModule(index); };
+                item.onclick = () => { loadModule(index); };
                 
                 item.innerHTML = `
                     <i data-lucide="${icon}" class="nav-icon"></i>
@@ -366,16 +379,8 @@
             updateProgress();
         }
 
-        function getHighestUnlocked() {
-            let num = 0;
-            for(let i=0; i<completedModules.length; i++) {
-                if(completedModules[i]) num = i+1;
-            }
-            return num >= COURSE_DATA.modules.length ? COURSE_DATA.modules.length -1 : num;
-        }
-
         function playVideoSimulation() {
-            alert("PMO Notice: The interactive video content will be embedded here in production. For now, please review the text blocks below and click 'Mark as Completed' to advance.");
+            alert("PMO Notice: This is a placeholder section. In production, this anchors a video player. For now, please review the manual steps below.");
         }
 
         function loadModule(index) {
@@ -386,32 +391,17 @@
             document.getElementById('content-title').innerText = data.title;
             document.getElementById('content-subtitle').innerText = data.subtitle;
             
-            // Dynamic Visual Anchor (Carousel vs Video Mockup)
+            // Dynamic Visual Anchor (Video vs Mockup)
             const visualContainer = document.getElementById('visual-container');
-            if (data.images && data.images.length > 0) {
-                // Carousel View
-                visualContainer.classList.add('is-carousel');
-                let imagesHtml = `
-                    <div class="carousel-btn left" onclick="scrollCarousel(-1)">
-                        <i data-lucide="chevron-left" width="24" height="24"></i>
-                    </div>
-                    <div class="carousel-btn right" onclick="scrollCarousel(1)">
-                        <i data-lucide="chevron-right" width="24" height="24"></i>
-                    </div>
-                    <div class="image-carousel" id="carousel-track">
+            if (data.videoUrl) {
+                // Render Real Video Element
+                visualContainer.innerHTML = `
+                    <video src="${data.videoUrl}" controls style="width: 100%; height: 100%; object-fit: contain; background: #000;"></video>
                 `;
-                data.images.forEach(img => {
-                    imagesHtml += `<img src="${img}" class="carousel-img" alt="Step Screenshot" onclick="openLightbox('${img}')">`;
-                });
-                imagesHtml += '</div><div style="position: absolute; bottom: 8px; left: 16px; color: rgba(255,255,255,0.8); font-size: 12px; z-index: 5; text-shadow: 0px 1px 4px rgba(0,0,0,0.8);">💡 Click any image to enlarge</div>';
-                
-                visualContainer.innerHTML = imagesHtml;
-                visualContainer.onclick = null; // Remove the alert click
+                visualContainer.onclick = null;
                 visualContainer.style.cursor = 'default';
             } else {
-                // Video Mockup View
-                visualContainer.classList.remove('is-carousel');
-                // Video Mockup View
+                // Render Video Mockup
                 visualContainer.innerHTML = `
                     <div class="visual-overlay"></div>
                     <div class="play-button"><i data-lucide="play"></i></div>
@@ -422,7 +412,7 @@
                 visualContainer.style.cursor = 'pointer';
             }
 
-            // Render Full Text Content
+            // Render Full Text Content with Inline Images
             document.getElementById('full-html-content').innerHTML = data.contentHtml;
 
             // Render Bullets
@@ -492,15 +482,7 @@
             document.getElementById('progress-bar').style.width = percentage + "%";
         }
 
-        // --- NEW FEATURES ---
-        function scrollCarousel(direction) {
-            const track = document.getElementById('carousel-track');
-            if (track) {
-                const scrollAmount = track.clientWidth * 0.7; // Scroll 70% of the visible container
-                track.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
-            }
-        }
-
+        // Lightbox Functions
         function openLightbox(imgSrc) {
             const lb = document.getElementById('lightbox');
             const lbImg = document.getElementById('lightbox-img');
@@ -513,7 +495,6 @@
             lb.classList.remove('active');
         }
         
-        // Escape key closes lightbox
         document.addEventListener('keydown', function(event) {
             if (event.key === "Escape") closeLightbox();
         });
