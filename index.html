@@ -20,6 +20,7 @@
             --bg-card: #FFFFFF;
             --border: #E2E8F0;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
 
@@ -57,13 +58,18 @@
         .lesson-title { font-size: 32px; font-weight: 700; color: var(--primary); line-height: 1.2; margin-bottom: 12px; }
         .lesson-subtitle { font-size: 18px; color: var(--text-muted); font-weight: 400; }
 
-        /* VISUAL ANCHOR */
-        .visual-anchor { width: 100%; height: 280px; background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); border-radius: 12px; box-shadow: var(--shadow-lg); margin-bottom: 40px; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        /* VISUAL ANCHOR (DYNAMIC) */
+        .visual-anchor { width: 100%; height: 280px; background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); border-radius: 12px; box-shadow: var(--shadow-lg); margin-bottom: 40px; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s }
         .visual-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at top right, rgba(0, 120, 212, 0.2), transparent); }
         .play-button { width: 64px; height: 64px; background-color: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; z-index: 2; border: 1px solid rgba(255,255,255,0.2); }
         .play-button:hover { transform: scale(1.1); background-color: rgba(255, 255, 255, 0.2); }
         .play-button i[data-lucide] { color: white; width: 24px; height: 24px; margin-left: 4px; }
         .duration-badge { position: absolute; bottom: 16px; right: 16px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; z-index: 2; display: flex; align-items: center; gap: 6px; }
+        
+        /* IMAGE CAROUSEL (NEW) */
+        .image-carousel { display: flex; overflow-x: auto; width: 100%; height: 100%; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 16px; padding: 0 24px; align-items: center; background: transparent; }
+        .image-carousel::-webkit-scrollbar { display: none; }
+        .carousel-img { flex: 0 0 auto; width: auto; max-width: 90%; height: 85%; border-radius: 8px; object-fit: contain; scroll-snap-align: center; box-shadow: var(--shadow-md); border: 1px solid rgba(255,255,255,0.2); background: #222; }
 
         /* FULL CONTENT SECTION */
         .detailed-content { margin-bottom: 40px; color: var(--text-dark); line-height: 1.7; font-size: 15px; }
@@ -134,18 +140,9 @@
                 <p class="lesson-subtitle" id="content-subtitle">Please wait.</p>
             </div>
 
-            <!-- VISUAL ANCHOR -->
-            <div class="visual-anchor" onclick="playVideoSimulation()">
-                <div class="visual-overlay"></div>
-                <div class="play-button">
-                    <i data-lucide="play"></i>
-                </div>
-                <div class="duration-badge">
-                    <i data-lucide="clock" width="14" height="14"></i> <span id="visual-timer">15:00</span>
-                </div>
-                <div style="position: absolute; bottom: 16px; left: 24px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500;">
-                    Video Placeholder (Mockup)
-                </div>
+            <!-- VISUAL ANCHOR (DYNAMIC VIDEO OR CAROUSEL) -->
+            <div class="visual-anchor" id="visual-container">
+                <!-- Javascript Injects Carousel or Video Placeholder here -->
             </div>
 
             <!-- DYNAMIC FULL TEXT CONTENT -->
@@ -184,6 +181,7 @@
                     time: "10 min",
                     title: "Eligibility Validation",
                     subtitle: "Mandatory pre-checks before assisting the customer with the app registration.",
+                    images: [],
                     contentHtml: `
                         <h3>Pre-Registration Step-by-Step</h3>
                         <p>Before proceeding with the app installation or guided flow, the agent must perform critical validations in the system to confirm the customer's eligibility and status.</p>
@@ -220,6 +218,14 @@
                     time: "15 min",
                     title: "The Customer Journey",
                     subtitle: "Step-by-step guidance within the Mi Negocio+ (MX) application.",
+                    images: [
+                        "assets/1.jpeg",
+                        "assets/2.jpeg",
+                        "assets/3.jpeg",
+                        "assets/4.jpeg",
+                        "assets/5.jpeg",
+                        "assets/6.jpeg"
+                    ],
                     contentHtml: `
                         <h3>Guided Registration Process</h3>
                         <p>Follow these steps exactly as they appear on the customer's screen during a live call.</p>
@@ -255,6 +261,7 @@
                     time: "12 min",
                     title: "Handling Errors & Blocks",
                     subtitle: "Standard Operational Procedures for technological contingencies.",
+                    images: [],
                     contentHtml: `
                         <h3>Post-Registration Troubleshooting Matrix</h3>
                         <p>If the customer completes registration but cannot log in, structural blocks may be in place. Follow the strict resolution paths below based on the symptom.</p>
@@ -348,6 +355,10 @@
             return num >= COURSE_DATA.modules.length ? COURSE_DATA.modules.length -1 : num;
         }
 
+        function playVideoSimulation() {
+            alert("PMO Notice: The interactive video content will be embedded here in production. For now, please review the text blocks below and click 'Mark as Completed' to advance.");
+        }
+
         function loadModule(index) {
             currentModuleIndex = index;
             const data = COURSE_DATA.modules[index];
@@ -355,8 +366,32 @@
             document.getElementById('header-module-name').innerText = data.sidebarName;
             document.getElementById('content-title').innerText = data.title;
             document.getElementById('content-subtitle').innerText = data.subtitle;
-            document.getElementById('visual-timer').innerText = data.time;
             
+            // Dynamic Visual Anchor (Carousel vs Video Mockup)
+            const visualContainer = document.getElementById('visual-container');
+            if (data.images && data.images.length > 0) {
+                // Carousel View
+                let imagesHtml = '<div class="image-carousel">';
+                data.images.forEach(img => {
+                    imagesHtml += \`<img src="\${img}" class="carousel-img" alt="Step Screenshot">\`;
+                });
+                imagesHtml += '</div><div style="position: absolute; bottom: 8px; right: 16px; color: rgba(255,255,255,0.8); font-size: 11px; z-index: 5; text-shadow: 0px 1px 4px rgba(0,0,0,0.8);">→ Scroll horizontally to see all steps </div>';
+                
+                visualContainer.innerHTML = imagesHtml;
+                visualContainer.onclick = null; // Remove the alert click
+                visualContainer.style.cursor = 'default';
+            } else {
+                // Video Mockup View
+                visualContainer.innerHTML = \`
+                    <div class="visual-overlay"></div>
+                    <div class="play-button"><i data-lucide="play"></i></div>
+                    <div class="duration-badge"><i data-lucide="clock" width="14" height="14"></i> <span id="visual-timer">\${data.time}</span></div>
+                    <div style="position: absolute; bottom: 16px; left: 24px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500;">Video Placeholder (Mockup)</div>
+                \`;
+                visualContainer.onclick = playVideoSimulation;
+                visualContainer.style.cursor = 'pointer';
+            }
+
             // Render Full Text Content
             document.getElementById('full-html-content').innerHTML = data.contentHtml;
 
@@ -366,13 +401,13 @@
             data.bullets.forEach(b => {
                 const li = document.createElement('li');
                 li.className = "mece-item";
-                li.innerHTML = `
+                li.innerHTML = \`
                     <div class="bullet-icon"><i data-lucide="target" width="20" height="20"></i></div>
                     <div class="mece-content">
-                        <h5>${b.title}</h5>
-                        <p>${b.desc}</p>
+                        <h5>\${b.title}</h5>
+                        <p>\${b.desc}</p>
                     </div>
-                `;
+                \`;
                 bulletContainer.appendChild(li);
             });
 
@@ -396,6 +431,7 @@
             
             // Auto scroll to top
             document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
+            lucide.createIcons(); // Re-render standard icons
         }
 
         function completeModule() {
@@ -417,10 +453,6 @@
             
             document.getElementById('progress-percentage').innerText = percentage + "%";
             document.getElementById('progress-bar').style.width = percentage + "%";
-        }
-        
-        function playVideoSimulation() {
-            alert("PMO Notice: The interactive video content will be embedded here in production. For now, please review the text blocks below and click 'Mark as Completed' to advance.");
         }
 
         initCourse();
