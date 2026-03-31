@@ -163,9 +163,14 @@
                 <button class="btn btn-outline" id="prev-btn" onclick="prevModule()">
                     <i data-lucide="arrow-left" width="18" height="18"></i> Previous Lesson
                 </button>
-                <button class="btn btn-primary" id="complete-btn" onclick="completeModule()">
-                    Mark as Completed <i data-lucide="check" width="18" height="18"></i>
-                </button>
+                <div style="display:flex; gap:16px;">
+                    <button class="btn btn-outline" id="next-btn" onclick="nextModule()">
+                        Next Lesson <i data-lucide="arrow-right" width="18" height="18"></i>
+                    </button>
+                    <button class="btn btn-primary" id="complete-btn" onclick="completeModule()">
+                        Mark as Completed <i data-lucide="check" width="18" height="18"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </main>
@@ -373,7 +378,7 @@
                 // Carousel View
                 let imagesHtml = '<div class="image-carousel">';
                 data.images.forEach(img => {
-                    imagesHtml += \`<img src="\${img}" class="carousel-img" alt="Step Screenshot">\`;
+                    imagesHtml += `<img src="${img}" class="carousel-img" alt="Step Screenshot">`;
                 });
                 imagesHtml += '</div><div style="position: absolute; bottom: 8px; right: 16px; color: rgba(255,255,255,0.8); font-size: 11px; z-index: 5; text-shadow: 0px 1px 4px rgba(0,0,0,0.8);">→ Scroll horizontally to see all steps </div>';
                 
@@ -382,12 +387,12 @@
                 visualContainer.style.cursor = 'default';
             } else {
                 // Video Mockup View
-                visualContainer.innerHTML = \`
+                visualContainer.innerHTML = `
                     <div class="visual-overlay"></div>
                     <div class="play-button"><i data-lucide="play"></i></div>
-                    <div class="duration-badge"><i data-lucide="clock" width="14" height="14"></i> <span id="visual-timer">\${data.time}</span></div>
+                    <div class="duration-badge"><i data-lucide="clock" width="14" height="14"></i> <span id="visual-timer">${data.time}</span></div>
                     <div style="position: absolute; bottom: 16px; left: 24px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500;">Video Placeholder (Mockup)</div>
-                \`;
+                `;
                 visualContainer.onclick = playVideoSimulation;
                 visualContainer.style.cursor = 'pointer';
             }
@@ -401,13 +406,13 @@
             data.bullets.forEach(b => {
                 const li = document.createElement('li');
                 li.className = "mece-item";
-                li.innerHTML = \`
+                li.innerHTML = `
                     <div class="bullet-icon"><i data-lucide="target" width="20" height="20"></i></div>
                     <div class="mece-content">
-                        <h5>\${b.title}</h5>
-                        <p>\${b.desc}</p>
+                        <h5>${b.title}</h5>
+                        <p>${b.desc}</p>
                     </div>
-                \`;
+                `;
                 bulletContainer.appendChild(li);
             });
 
@@ -436,6 +441,13 @@
 
         function completeModule() {
             completedModules[currentModuleIndex] = true;
+            if (currentModuleIndex < COURSE_DATA.modules.length - 1) {
+                currentModuleIndex++;
+            }
+            loadModule(currentModuleIndex);
+        }
+
+        function nextModule() {
             if (currentModuleIndex < COURSE_DATA.modules.length - 1) {
                 currentModuleIndex++;
             }
