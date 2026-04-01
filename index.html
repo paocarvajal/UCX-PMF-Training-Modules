@@ -316,17 +316,23 @@
             document.getElementById('content-title').innerText = data.title;
             document.getElementById('content-subtitle').innerText = data.subtitle;
             
-            // Dynamic Banners (Classy Visual Integration)
+            // Category-Specific Video Poster Mapping
+            const categoryPosters = {
+                "HELP WITH MY ACCOUNT": "assets/App mi negocio.png",
+                "HELP WITH MY APP": "assets/Fotos  1.png",
+                "HELP WITH MY ORDER": "assets/Mision MiNegocio+.png",
+                "QUESTIONS ABOUT MY POINTS": "assets/Module Training organization.png",
+                "CREDIT INFORMATION": "assets/12.jpeg", // Using a solid standard screenshot fallback
+                "SNOW": "assets/1.jpeg" // Solid screenshot fallback
+            };
+            
+            // Deterministic random fallback if missing
             const fallbackBanners = [
                 "assets/Screenshot 2026-03-31 211350.png",
-                "assets/Screenshot 2026-03-31 211419.png",
-                "assets/Screenshot 2026-03-31 211443.png",
-                "assets/Screenshot 2026-03-31 211546.png",
-                "assets/Screenshot 2026-03-31 211616.png"
+                "assets/Screenshot 2026-03-31 211419.png"
             ];
             
-            // Deterministic assignment
-            let bannerImg = fallbackBanners[data.title.length % fallbackBanners.length];
+            let bannerImg = categoryPosters[data.category] || fallbackBanners[data.title.length % fallbackBanners.length];
             
             // Dynamic Visual Anchor (Video vs Mockup)
             const visualContainer = document.getElementById('visual-container');
