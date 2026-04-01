@@ -33,14 +33,36 @@
         .lightbox.active { display: flex; }
 
         /* SIDEBAR */
-        .sidebar { width: 320px; background-color: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; }
-        .sidebar-header { padding: 24px; border-bottom: 1px solid var(--border); }
+        .sidebar { width: 330px; background-color: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; }
+        
+        .sidebar-header-wrapper {
+            padding: 24px 0 24px 0;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .pepsico-watermark-pill {
+            position: absolute;
+            top: 16px; left: 0; bottom: 16px; right: 16px;
+            background-color: #0056B8; /* True Pepsico Blue */
+            opacity: 0.06; /* Watermark transparency */
+            border-radius: 0 40px 40px 0; /* Exact Right-Sided Pill Shape */
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .sidebar-header-content {
+            position: relative;
+            z-index: 1;
+            padding: 0 24px;
+        }
+
         .course-title { font-size: 14px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
-        .module-title { font-size: 20px; font-weight: 700; color: var(--primary); }
+        .module-title { font-size: 22px; font-weight: 800; color: #0056B8; line-height: 1.2; }
         .progress-container { margin-top: 16px; }
-        .progress-text { display: flex; justify-content: space-between; font-size: 12px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; }
+        .progress-text { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
         .progress-bar-bg { height: 6px; background-color: var(--border); border-radius: 4px; overflow: hidden; }
-        .progress-bar-fill { height: 100%; width: 0%; background-color: var(--success); border-radius: 4px; transition: width 0.5s ease-in-out; }
+        .progress-bar-fill { height: 100%; width: 0%; background-color: #0056B8; border-radius: 4px; transition: width 0.5s ease-in-out; }
         .nav-list { flex: 1; overflow-y: auto; padding: 16px 0; }
         .nav-item { display: flex; align-items: flex-start; padding: 16px 24px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; gap: 16px; }
         .nav-item:hover { background-color: #F1F5F9; }
@@ -59,12 +81,11 @@
         .content-wrapper { max-width: 900px; margin: 0 auto; padding: 48px; width: 100%; }
 
         /* HEADER */
-        .lesson-header { margin-bottom: 32px; border-bottom: 1px solid var(--border); padding-bottom: 24px;}
-        .lesson-title { font-size: 32px; font-weight: 700; color: var(--primary); line-height: 1.2; margin-bottom: 12px; }
-        .lesson-subtitle { font-size: 18px; color: var(--text-muted); font-weight: 400; }
-
-        /* VISUAL ANCHOR (DYNAMIC VIDEO) */
-        .visual-anchor { width: 100%; height: 350px; background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); border-radius: 12px; box-shadow: var(--shadow-lg); margin-bottom: 40px; position: relative; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s }
+        .lesson-header { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+        .lesson-title { font-size: 32px; font-weight: 700; color: var(--primary); margin: 0 0 8px 0; letter-spacing: -0.02em; }
+        .lesson-subtitle { font-size: 16px; color: var(--text-muted); margin: 0; font-weight: 400; }
+        
+        .content-wrapper { padding: 40px; max-width: 900px; margin: 0 auto; }  .visual-anchor { width: 100%; height: 350px; background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); border-radius: 12px; box-shadow: var(--shadow-lg); margin-bottom: 40px; position: relative; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s }
         .visual-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at top right, rgba(0, 120, 212, 0.2), transparent); pointer-events: none;}
         .play-button { width: 64px; height: 64px; background-color: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; z-index: 2; border: 1px solid rgba(255,255,255,0.2); }
         .play-button:hover { transform: scale(1.1); background-color: rgba(255, 255, 255, 0.2); }
@@ -105,7 +126,22 @@
         .btn-primary:hover { background-color: #0066B4; transform: translateY(-1px); }
         .btn-success { background-color: var(--success); color: white; }
 
+        /* TABLES */
+        .confluence-table { width: 100%; border-collapse: collapse; margin: 24px 0 32px 0; background-color: var(--bg-card); box-shadow: var(--shadow-sm); border-radius: 8px; overflow: hidden; font-size: 14px; }
+        .confluence-table th, .confluence-table td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
+        .confluence-table th { background-color: #F1F5F9; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; font-size: 12px; }
+        .confluence-table tr:last-child td { border-bottom: none; }
+        .confluence-table tr:hover td { background-color: #F8FAFC; }
+        .confluence-table p { margin: 0; }
+        .confluence-table a { color: var(--secondary); text-decoration: none; font-weight: 500; }
+        .confluence-table a:hover { text-decoration: underline; }
+
     </style>
+    <script src="data.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: false, theme: 'base', themeVariables: { primaryColor: '#f4f6fc', primaryTextColor: '#0f172a', primaryBorderColor: '#cbd5e1', lineColor: '#3b82f6' } });
+    </script>
 </head>
 <body>
 
@@ -116,17 +152,20 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <div class="course-title" id="course-name">Loading...</div>
-            <h2 class="module-title" id="course-topic">Loading...</h2>
-            
-            <div class="progress-container">
-                <div class="progress-text">
-                    <span>Course Progress</span>
-                    <span id="progress-percentage">0%</span>
-                </div>
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" id="progress-bar"></div>
+        <div class="sidebar-header-wrapper">
+            <div class="pepsico-watermark-pill"></div>
+            <div class="sidebar-header-content">
+                <div class="course-title" id="course-name">Loading...</div>
+                <h2 class="module-title" id="course-topic">Loading...</h2>
+                
+                <div class="progress-container">
+                    <div class="progress-text">
+                        <span>Course Progress</span>
+                        <span id="progress-percentage">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progress-bar"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -186,152 +225,15 @@
     </main>
 
     <script>
-        const COURSE_DATA = {
-            courseName: "Mi Negocio+ Registration",
-            courseTopic: "UCX PMF Training Module",
-            modules: [
-                {
-                    id: 1,
-                    sidebarName: "1. Triage & Validation",
-                    time: "10 min",
-                    title: "Eligibility Validation",
-                    subtitle: "Mandatory pre-checks before assisting the customer with the app registration.",
-                    contentHtml: `
-                        <h3>Pre-Registration Step-by-Step</h3>
-                        <p>Before proceeding with the app installation or guided flow, the agent must perform critical validations in the system to confirm the customer's eligibility and status.</p>
-                        
-                        <h4>1. Check Eligibility Database</h4>
-                        <p>Agent searches the eligibility database provided by Mi Negocio to confirm the customer is theoretically eligible for the program.</p>
-
-                        <h4>2. Check CEP (Mandatory)</h4>
-                        <p>Agent searches CEP to validate the customer's account status. This step is <strong>mandatory for all processes</strong>.</p>
-                        <ul>
-                            <li><strong>In Database AND CEP:</strong> Proceed normally.</li>
-                            <li><strong>In CEP only:</strong> Proceed (Customer is still eligible).</li>
-                            <li><strong>In Database only:</strong> Proceed (Customer likely has not started registration).</li>
-                            <li><strong>Not in either:</strong> Customer is <strong>not eligible</strong>. Provide the non-eligibility script and STOP.</li>
-                        </ul>
-
-                        <h4>3. Handling Existing Registrations</h4>
-                        <p>The agent must verify whether the customer already has a previous registration in CEP:</p>
-                        <ul>
-                            <li>If <strong>already registered</strong>: Do NOT create a new registration. Redirect to the <em>"I forgot my password"</em> process.</li>
-                            <li>If registered with an <strong>inaccessible email</strong>: Create a <strong>Service Request</strong> to request a user update (assigned to Luis Máximo).</li>
-                            <li>If CEP shows data of <strong>another person</strong>: Create a <strong>Service Request</strong> for data correction.</li>
-                        </ul>
-                    `,
-                    bullets: [
-                        { title: "Check Eligibility DB & CEP", desc: "Always cross-reference the customer against CEP to ensure valid status." },
-                        { title: "No Duplicate Registrations", desc: "If the customer is already in CEP, immediately pivot to Password Recovery." },
-                        { title: "Inaccessible Email Protocol", desc: "Do not attempt workarounds. Generate a Service Request assigned to Luis Máximo." }
-                    ]
-                },
-                {
-                    id: 2,
-                    sidebarName: "2. Customer Registration Flow",
-                    time: "15 min",
-                    title: "The Customer Journey",
-                    subtitle: "Step-by-step guidance within the Mi Negocio+ (MX) application.",
-                    videoUrl: "assets/Registration_Video.mp4",
-                    contentHtml: `
-                        <h3>Guided Registration Process</h3>
-                        <p>Follow these screens exactly as they appear on the customer's device during a live call. (Play the central video above for the full end-to-end recorded flow).</p>
-                        
-                        <div class="step-container">
-                            <div class="step-text">
-                                <h4>1. Method Selection & Phone Input</h4>
-                                <p>Customer chooses Phone, Email, or Google. <em>(Note: Recommend Phone. Gmail has known backend issues limiting password recovery)</em>. They must enter their Phone number and <strong>Client ID</strong> precisely to bind local databases correctly.</p>
-                            </div>
-                            <img class="step-img" src="assets/1.jpeg" alt="Phone Input" onclick="openLightbox('assets/1.jpeg')">
-                        </div>
-
-                        <div class="step-container">
-                            <div class="step-text">
-                                <h4>2. OTP Verification</h4>
-                                <p>The system triggers a One-Time-Password sent via SMS to the device. The customer must insert the 6-digit code to verify their identity and device ownership.</p>
-                                <div class="info-box" style="margin-top: 16px;">
-                                    <p><strong><i data-lucide="alert-triangle" style="width:14px; margin-bottom:-2px;"></i> Universal OTP Code Fallback:</strong> If the SMS fails, deploy the Generic Universal Code immediately to unblock the client.</p>
-                                </div>
-                            </div>
-                            <img class="step-img" src="assets/2.jpeg" alt="OTP Input" onclick="openLightbox('assets/2.jpeg')">
-                        </div>
-
-                        <div class="step-container">
-                            <div class="step-text">
-                                <h4>3. Welcome / Success Status Screen</h4>
-                                <p>Upon successful verification of the OTP or password reset, the app confirms the update and prompts the user to log in formally using their freshly minted or rescued credentials.</p>
-                            </div>
-                            <img class="step-img" src="assets/3.jpeg" alt="Welcome Screen" onclick="openLightbox('assets/3.jpeg')">
-                        </div>
-
-                        <div class="step-container">
-                            <div class="step-text">
-                                <h4>4. First Login Architecture</h4>
-                                <p>The customer arrives at the standard native login screen. They must input the phone number established and the password. Ensure strict adherence on password rules: <strong>8 Chars minimum, Upper, Lower, Numbers, and Symbols.</strong></p>
-                            </div>
-                            <img class="step-img" src="assets/4.jpeg" alt="Login View" onclick="openLightbox('assets/4.jpeg')">
-                        </div>
-
-                        <div class="step-container">
-                            <div class="step-text">
-                                <h4>5. Terms & Conditions Compliance</h4>
-                                <p>Before passing into the active dashboard, the mandatory legal Terms & Conditions must be verified. Ensure the client actively checks the appropriate dialogue box before clicking "Aceptar".</p>
-                            </div>
-                            <img class="step-img" src="assets/5.jpeg" alt="Terms and Conditions" onclick="openLightbox('assets/5.jpeg')">
-                        </div>
-
-                        <div class="step-container" style="border-bottom:none;">
-                            <div class="step-text">
-                                <h4>6. Final Profile Aggregation</h4>
-                                <p>The system finishes mapping the Client ID against national data dictionaries and generates the default store profile, locking address information which natively becomes uneditable from the application layer.</p>
-                            </div>
-                            <img class="step-img" src="assets/6.jpeg" alt="Profile View" onclick="openLightbox('assets/6.jpeg')">
-                        </div>
-                    `,
-                    bullets: [
-                        { title: "Registration Method", desc: "Phone is highly recommended. Flag Gmail as a known risk for future recovery issues." },
-                        { title: "Universal OTP (Fallback)", desc: "If the customer is stuck waiting for a code, deploy the universal contingency code immediately." },
-                        { title: "Password Rule Enforcement", desc: "Ensure strict adherence: 8 Chars, Upper, Lower, Numbers, and Symbols." }
-                    ]
-                },
-                {
-                    id: 3,
-                    sidebarName: "3. Troubleshooting (Escalations)",
-                    time: "12 min",
-                    title: "Handling Errors & Blocks",
-                    subtitle: "Standard Operational Procedures for technological contingencies.",
-                    contentHtml: `
-                        <h3>Post-Registration Troubleshooting Matrix</h3>
-                        <p>If the customer completes registration but cannot log in, structural blocks may be in place. Follow the strict resolution paths below based on the symptom.</p>
-                        
-                        <h4>Account Level Blocks</h4>
-                        <ul>
-                            <li><strong>Account is Blocked in CEP:</strong> If Okta status explicitly shows "blocked", the agent has direct authorization to <strong>Unblock</strong> the account via CEP. No escalation required.</li>
-                            <li><strong>Account is Inactive or Suspended:</strong> Agent cannot fix this directly. Generate a <strong>Service Request</strong>.</li>
-                        </ul>
-
-                        <h4>Technical Errors</h4>
-                        <p>System failures must be tracked using the official IT Service Management tool:</p>
-                        <ul>
-                            <li><strong>"User Not Recognized" Error:</strong> If the account is NOT blocked but this error appears, create an <strong>Incident</strong> in Service Now (assigned to Gerardo).</li>
-                            <li><strong>App Crashes/Freezes:</strong> If the application explicitly crashes during the flow or throws unhandled server errors, generate an <strong>Incident</strong> in Service Now (assigned to Gerardo).</li>
-                        </ul>
-                    `,
-                    bullets: [
-                        { title: "Direct Unblocking", desc: "Okta 'blocked' statuses can be unblocked directly by the agent in CEP." },
-                        { title: "Service Requests", desc: "Use SRs exclusively for Inactive/Suspended states or Email/Data updates." },
-                        { title: "Service Now Incidents", desc: "Route actual App Crashes and 'User Not Recognized' bugs to Gerardo." }
-                    ]
-                }
-            ]
-        };
-
+        // COURSE_DATA is now loaded dynamically from data.js
+        
         // Initialize Icons
         lucide.createIcons();
         let currentModuleIndex = 0;
-        let completedModules = Array(COURSE_DATA.modules.length).fill(false);
+        let completedModules = [];
 
         function initCourse() {
+            completedModules = Array(COURSE_DATA.modules.length).fill(false);
             document.getElementById('course-name').innerText = COURSE_DATA.courseName;
             document.getElementById('course-topic').innerText = COURSE_DATA.courseTopic;
             document.getElementById('header-topic').innerText = COURSE_DATA.courseTopic;
@@ -343,38 +245,60 @@
             const container = document.getElementById('nav-list-container');
             container.innerHTML = '';
             
-            COURSE_DATA.modules.forEach((mod, index) => {
-                let statusClass = "locked";
-                let icon = "lock";
-                let statusText = "Locked";
-
-                if (completedModules[index]) {
-                    statusClass = "completed";
-                    icon = "check-circle";
-                    statusText = "Completed";
-                } else if (index === currentModuleIndex) {
-                    statusClass = "active";
-                    icon = "play-circle";
-                    statusText = "In Progress";
-                } else {
-                    statusClass = "";
-                    icon = "play";
-                    statusText = "Available";
+            const categories = {};
+            COURSE_DATA.modules.forEach(mod => {
+                if (!categories[mod.category]) {
+                    categories[mod.category] = [];
                 }
-
-                const item = document.createElement('div');
-                item.className = `nav-item ${statusClass}`;
-                item.onclick = () => { loadModule(index); };
-                
-                item.innerHTML = `
-                    <i data-lucide="${icon}" class="nav-icon"></i>
-                    <div class="nav-content-stacked">
-                        <h4>${mod.sidebarName}</h4>
-                        <p>${mod.time} • ${statusText}</p>
-                    </div>
-                `;
-                container.appendChild(item);
+                categories[mod.category].push(mod);
             });
+
+            for (const [catName, mods] of Object.entries(categories)) {
+                const header = document.createElement('div');
+                header.style.padding = '24px 24px 8px';
+                header.style.fontSize = '12px';
+                header.style.fontWeight = '700';
+                header.style.color = 'var(--primary)';
+                header.style.textTransform = 'uppercase';
+                header.style.letterSpacing = '0.05em';
+                header.innerText = catName;
+                container.appendChild(header);
+
+                mods.forEach(mod => {
+                    const index = COURSE_DATA.modules.indexOf(mod);
+                    let statusClass = "locked";
+                    let icon = "lock";
+                    let statusText = "Locked";
+
+                    if (completedModules[index]) {
+                        statusClass = "completed";
+                        icon = "check-circle";
+                        statusText = "Completed";
+                    } else if (index === currentModuleIndex) {
+                        statusClass = "active";
+                        icon = "play-circle";
+                        statusText = "In Progress";
+                    } else {
+                        statusClass = "";
+                        icon = "play";
+                        statusText = "Available";
+                    }
+
+                    const item = document.createElement('div');
+                    item.className = `nav-item ${statusClass}`;
+                    item.onclick = () => { loadModule(index); };
+                    
+                    item.innerHTML = `
+                        <i data-lucide="${icon}" class="nav-icon"></i>
+                        <div class="nav-content-stacked">
+                            <h4>${mod.sidebarName}</h4>
+                            <p>${mod.time} • ${statusText}</p>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                });
+            }
+
             lucide.createIcons();
             updateProgress();
         }
@@ -391,29 +315,71 @@
             document.getElementById('content-title').innerText = data.title;
             document.getElementById('content-subtitle').innerText = data.subtitle;
             
+            // Dynamic Banners (Classy Visual Integration)
+            const fallbackBanners = [
+                "assets/Screenshot 2026-03-31 211350.png",
+                "assets/Screenshot 2026-03-31 211419.png",
+                "assets/Screenshot 2026-03-31 211443.png",
+                "assets/Screenshot 2026-03-31 211546.png",
+                "assets/Screenshot 2026-03-31 211616.png"
+            ];
+            
+            // Deterministic assignment
+            let bannerImg = fallbackBanners[data.title.length % fallbackBanners.length];
+            
             // Dynamic Visual Anchor (Video vs Mockup)
             const visualContainer = document.getElementById('visual-container');
+            
+            // Render High Definition Poster for BOTH Mockup and Real Videos
+            visualContainer.style.backgroundImage = `url('${bannerImg}')`;
+            visualContainer.style.backgroundSize = "cover";
+            visualContainer.style.backgroundPosition = "center";
+            visualContainer.innerHTML = `
+                <div class="visual-overlay" style="background: rgba(15,23,42,0.4);"></div>
+                <div class="play-button" style="background-color: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); border: 2px solid rgba(255,255,255,0.4);"><i data-lucide="play" color="white" fill="white"></i></div>
+                <div class="duration-badge"><i data-lucide="clock" width="14" height="14"></i> <span id="visual-timer">${data.time}</span></div>
+                <div style="position: absolute; bottom: 16px; left: 24px; color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">${data.videoUrl ? 'Click to Play Training Video' : 'Internal Training Video Placeholder (Mockup)'}</div>
+            `;
+            visualContainer.style.cursor = 'pointer';
+            
             if (data.videoUrl) {
-                // Render Real Video Element
-                visualContainer.innerHTML = `
-                    <video src="${data.videoUrl}" controls style="width: 100%; height: 100%; object-fit: contain; background: #000;"></video>
-                `;
-                visualContainer.onclick = null;
-                visualContainer.style.cursor = 'default';
+                // If real video exists, click to dynamically load and autoplay the video!
+                visualContainer.onclick = () => {
+                    visualContainer.style.backgroundImage = 'none';
+                    visualContainer.innerHTML = `
+                        <video src="${data.videoUrl}" controls autoplay style="width: 100%; height: 100%; border-radius: 12px; object-fit: contain; background: #000;"></video>
+                    `;
+                    visualContainer.onclick = null;
+                    visualContainer.style.cursor = 'default';
+                };
             } else {
-                // Render Video Mockup
-                visualContainer.innerHTML = `
-                    <div class="visual-overlay"></div>
-                    <div class="play-button"><i data-lucide="play"></i></div>
-                    <div class="duration-badge"><i data-lucide="clock" width="14" height="14"></i> <span id="visual-timer">${data.time}</span></div>
-                    <div style="position: absolute; bottom: 16px; left: 24px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500;">Video Placeholder (Mockup)</div>
-                `;
+                // Otherwise use the simulation mockup behavior
                 visualContainer.onclick = playVideoSimulation;
-                visualContainer.style.cursor = 'pointer';
             }
 
-            // Render Full Text Content with Inline Images
-            document.getElementById('full-html-content').innerHTML = data.contentHtml;
+            // Render Full Text Content with Flowcharts
+            let flowChartHtml = '';
+            if (data.flowchart) {
+                flowChartHtml = `
+                    <div style="padding: 24px; background: white; border-radius: 12px; margin-bottom: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border);">
+                        <h3 style="color: var(--primary); margin-bottom: 24px; font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 12px;"><i data-lucide="git-merge" width="18" height="18"></i> Process Flowchart</h3>
+                        <div class="mermaid" id="mermaid-graph-${index}">
+                            ${data.flowchart}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Auto placement logic: Before Systems / Tools, or fallback to top
+            let finalHtml = data.contentHtml;
+            const targetRegex = /<h[1-6]>\s*(?:<strong>)?\s*Systems\s*\/\s*Tools\s*(?:<\/strong>)?\s*<\/h[1-6]>/i;
+            if (targetRegex.test(finalHtml)) {
+                finalHtml = finalHtml.replace(targetRegex, (match) => flowChartHtml + match);
+            } else {
+                finalHtml = flowChartHtml + finalHtml;
+            }
+            
+            document.getElementById('full-html-content').innerHTML = finalHtml;
 
             // Render Bullets
             const bulletContainer = document.getElementById('bullet-points-container');
@@ -452,6 +418,15 @@
             // Auto scroll to top
             document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
             lucide.createIcons(); // Re-render standard icons
+            
+            // Render Mermaid Flowchart
+            setTimeout(() => {
+                if (data.flowchart) {
+                    try {
+                        mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+                    } catch (e) { console.error("Mermaid error:", e); }
+                }
+            }, 100);
         }
 
         function completeModule() {
